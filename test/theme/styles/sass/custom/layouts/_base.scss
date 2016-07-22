@@ -1,0 +1,102 @@
+/* ==========================================================================
+   Regions
+
+   Used for navigation layouts
+========================================================================== */
+.region-topbar {
+	min-height: $topbar-minimalheight;
+	border-style: none;
+	box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.40);
+	> .mx-layoutcontainer-wrapper {
+		padding: 0;
+	}
+
+	.toggle-btn {
+		color: #FFF;
+		border-color: #FFF;
+
+		&:focus,
+		&:hover,
+		&:active,
+		&.active {
+			background-color: $color-primary-darker;
+		}
+	}
+
+	// SSO widgets
+	.navbar-right {
+		.mx-appswitcher-button-placeholder,
+		.mx-profilemenu-button-placeholder {
+			padding: 8px 15px;
+			cursor: pointer;
+			border-color: #004483;
+			-webkit-transition: background-color .2s ease;
+			-o-transition: background-color .2s ease;
+			transition: background-color .2s ease;
+
+			&:hover,
+			&:focus {
+				background-color: #004483;
+			}
+			iframe {
+
+			}
+		}
+		.mx-profilemenu-button-placeholder {
+			
+		}
+	}
+}
+.region-sidebar,
+.layout-sidebar-responsive .region-sidebar-fixed {
+	background-color: $navsidebar-bg;
+	border-right: 1px solid $gray-primary;
+	box-shadow: 0 0 4px rgba(0,0,0,.14),2px 4px 8px rgba(0,0,0,.28);
+	-webkit-transition: all .35s ease 0s;
+	-o-transition: all .35s ease 0s;
+	transition: all .35s ease 0s;
+	> .mx-layoutcontainer-wrapper {
+		padding: 0;
+	}
+}
+.mx-scrollcontainer-move-in {
+	border-right: 1px solid $gray-primary;
+	box-shadow: 0 0 4px rgba(0,0,0,.14),2px 4px 8px rgba(0,0,0,.28);
+}
+.profile-phone {
+	.region-sidebar {
+		transform: none;
+		box-shadow: none;
+		border-right: none;
+		transition: none;
+	}
+}
+.region-content {
+	> .mx-layoutcontainer-wrapper {
+
+	}
+}
+
+
+/* ==========================================================================
+   Navbar Brand
+
+   Used to style your app brand and logo
+========================================================================== */
+.navbar-brand {
+	min-height: 70px;
+	padding: 0;
+	line-height: 70px;
+	img {
+
+	}
+	a {
+		color: #FFF;
+		font-size: 20px;
+
+		&:hover,
+		&:focus {
+			
+		}
+	}
+}

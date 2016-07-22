@@ -1,0 +1,23 @@
+/* ==========================================================================
+   Dashboard Card
+========================================================================== */
+.dashboardcard {
+	border-style: none;
+	box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.26);
+	border-radius: 0;
+}
+.dashboardcard-title {
+	/* Styles here */
+}
+.dashboardcard-subtitle {
+	/* Styles here */
+}
+.dashboardcard-link {
+	/* Styles here */
+}
+
+@media only screen and (max-width: 960px) {
+	.dashboardcard {
+
+	}
+}

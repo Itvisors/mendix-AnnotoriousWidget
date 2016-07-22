@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<widget id="AnnotoriousWidget.widget.AnnotoriousWidget" needsEntityContext="true" xmlns="http://www.mendix.com/widget/1.0/">
+    <name>AnnotoriousWidget</name>
+    <description>The description of this widget.</description>
+
+    <icon />
+
+    <properties>
+        <property key="annotationDataAttr" type="attribute">
+            <caption>Annotation data</caption>
+            <category>Configuration</category>
+            <description>The attribute to hold all annotation data. Use an unlimited length string!</description>
+            <attributeTypes>
+                <attributeType name="String" />
+            </attributeTypes>
+        </property>
+        <property key="allowChange" type="boolean" defaultValue="true">
+            <caption>Allow change</caption>
+            <category>Layout</category>
+            <description>Whether to allow creating and changing of annotations. Turn off to show existing annotations only.</description>
+        </property>
+        <property key="annotationOnChangeMF" type="microflow" required="false" defaultValue="">
+            <caption>On change MF</caption>
+            <category>Configuration</category>
+            <description>Optional, the microflow to execute after any change on the annotations.</description>
+            <returnType type="Void" />
+        </property>
+        <property key="imgClass" type="string" required="false">
+            <caption>Image class</caption>
+            <category>Styling</category>
+            <description>Specify class(es) to be put on the image</description>
+        </property>                
+    </properties>
+</widget>
+

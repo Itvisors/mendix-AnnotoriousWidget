@@ -1,0 +1,29 @@
+/* ==========================================================================
+   Header
+
+   Default Mendix Header for Mobile 
+========================================================================== */
+body .mx-header {
+	border-style: none;
+	box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.40);
+	.mx-header-center {
+
+	}
+	.mx-header-left {	
+		.mx-link a {
+			color: $m-header-link-color;
+		}
+	}
+	.mx-header-right {	
+
+	}
+
+	// Title
+	.mx-title {
+
+	}
+
+	.btn-image.glyphicon {
+
+ 	}
+}
