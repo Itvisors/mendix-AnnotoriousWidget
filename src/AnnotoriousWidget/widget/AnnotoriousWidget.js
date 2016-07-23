@@ -137,7 +137,7 @@ define([
                 this.imgUrl = document.location.origin + "/file?target=internal&guid=" + this._contextObj.getGuid();
                 this.imgNode.setAttribute("src", this.imgUrl);
                 setTimeout(function () {
-                    thisObj._loadAnnotations();
+                    dojoLang.hitch(thisObj, thisObj._loadAnnotations());
                 }, 100);
                 
 
@@ -157,6 +157,12 @@ define([
                 annotationJson,
                 newAnnotation,
                 thisObj = this;
+            
+            // Mendix calls the update function with a context object and resets it after that. This happens when the cancel button is clicked.
+            // This function is called with a setTimeout. By then, another call has been received where the imgUrl (and anno functionality) has been reset.
+            if (this.imgUrl === null) {
+                return;
+            }
             
             anno.makeAnnotatable(this.imgNode);
             if (this.allowChange) {

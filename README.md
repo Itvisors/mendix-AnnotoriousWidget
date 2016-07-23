@@ -16,9 +16,12 @@ Place annotations on images. The annotations are saved as JSON. Your entity need
 
 ## Configuration
 
-
 The context entity must inherit from Image.
 
 The only required property is the annotation attribute on the context entity.
 
 Optionally, a microflow can be called after each change on the annotations.
+
+## Limitations
+
+Not suitable for use in template grids or listviews. Please open another page to do the actual annotations.
