@@ -65,32 +65,27 @@ define([
         postCreate: function () {
             logger.debug(this.id + ".postCreate");
             
+            var thisObj = this;
+
             this.imgNode = document.createElement("img");
             if (this.imgClass) {
                 dojoClass.add(this.imgNode, this.imgClass);
             }
             this.domNode.appendChild(this.imgNode);
+            require([document.location.origin + "/widgets/AnnotoriousWidget/lib/annotorious.min.js"], function () {
+                thisObj._setupEvents();
+                thisObj._updateRendering();
+            });
 
-            this._updateRendering();
-            this._setupEvents();
         },
 
         // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
         update: function (obj, callback) {
             logger.debug(this.id + ".update");
 
-            var thisObj = this;
-
             this._contextObj = obj;
             this._resetSubscriptions();
-            // We're passing the callback to updateRendering to be called after DOM-manipulation
-            if (typeof anno !== "undefined") {
-                thisObj._updateRendering();
-            } else {
-                require([document.location.origin + "/widgets/AnnotoriousWidget/lib/annotorious.min.js"], function () {
-                    thisObj._updateRendering();
-                });
-            }
+            this._updateRendering();
             
             // The callback, coming from update, needs to be executed, to let the page know it finished rendering
             mendix.lang.nullExec(callback);
@@ -124,21 +119,34 @@ define([
         // Attach events to HTML dom elements
         _setupEvents: function () {
             logger.debug(this.id + "._setupEvents");
+            if (this.allowChange) {
+                anno.addHandler("onAnnotationCreated", dojoLang.hitch(this, this._handleChange));
+                anno.addHandler("onAnnotationUpdated", dojoLang.hitch(this, this._handleChange));
+                anno.addHandler("onAnnotationRemoved", dojoLang.hitch(this, this._handleChange));
+            }
         },
 
         // Rerender the interface.
         _updateRendering: function () {
             logger.debug(this.id + "._updateRendering");
-            var thisObj = this;
+            var newImgUrl;
             
             if (this._contextObj !== null) {
                 dojoStyle.set(this.domNode, "display", "block");
                 
-                this.imgUrl = document.location.origin + "/file?target=internal&guid=" + this._contextObj.getGuid();
-                this.imgNode.setAttribute("src", this.imgUrl);
-                setTimeout(function () {
-                    dojoLang.hitch(thisObj, thisObj._loadAnnotations());
-                }, 100);
+                newImgUrl = document.location.origin + "/file?target=internal&guid=" + this._contextObj.getGuid();
+                if (newImgUrl !== this.imgUrl) {
+                    if (this.imgUrl) {
+                        anno.destroy(this.imgUrl);
+                    }
+                    this.imgUrl = newImgUrl;
+                    this.imgNode.setAttribute("src", this.imgUrl);
+                    anno.makeAnnotatable(this.imgNode);
+                }
+                this._loadAnnotations();
+//                setTimeout(function () {
+//                    dojoLang.hitch(thisObj, thisObj._loadAnnotations());
+//                }, 100);
                 
 
             } else {
@@ -163,17 +171,13 @@ define([
             if (this.imgUrl === null) {
                 return;
             }
-            
-            anno.makeAnnotatable(this.imgNode);
-            if (this.allowChange) {
-                anno.addHandler("onAnnotationCreated", dojoLang.hitch(this, this._handleChange));
-                anno.addHandler("onAnnotationUpdated", dojoLang.hitch(this, this._handleChange));
-                anno.addHandler("onAnnotationRemoved", dojoLang.hitch(this, this._handleChange));
-            } else {
+
+            if (!this.allowChange) {
                 anno.hideSelectionWidget(this.imgUrl);
             }
 
             annotationJson = this._contextObj.get(this.annotationDataAttr);
+            anno.removeAll(this.imgUrl);
             if (annotationJson) {
                 annotationArray = JSON.parse(annotationJson);
                 dojoArray.forEach(annotationArray, function (annotationFromDB) {
