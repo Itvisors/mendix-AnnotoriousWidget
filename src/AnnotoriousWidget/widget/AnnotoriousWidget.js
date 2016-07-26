@@ -135,26 +135,32 @@ define([
         // Rerender the interface.
         _updateRendering: function () {
             logger.debug(this.id + "._updateRendering");
-            var newImgUrl;
+            var imageObj,
+                newImgUrl,
+                thisObj = this;
             
             if (this._contextObj !== null) {
                 dojoStyle.set(this.domNode, "display", "block");
                 
                 newImgUrl = document.location.origin + "/file?target=internal&guid=" + this._contextObj.getGuid();
-                if (newImgUrl !== this.imgUrl) {
+                if (newImgUrl === this.imgUrl) {
+                    this._loadAnnotations();
+                } else {
                     logger.debug(this.id + "._updateRendering: different URL");
                     if (this.imgUrl) {
                         logger.debug(this.id + "._updateRendering: anno.destroy");
                         anno.destroy(this.imgUrl);
                     }
                     this.imgUrl = newImgUrl;
-                    this.imgNode.setAttribute("src", this.imgUrl);
-                    anno.makeAnnotatable(this.imgNode);
+                    // Use Image object to load the image and only continue when it is in the browser cache.
+                    imageObj = new Image();
+                    imageObj.onload = function () {
+                        thisObj.imgNode.setAttribute("src", thisObj.imgUrl);
+                        anno.makeAnnotatable(thisObj.imgNode);
+                        thisObj._loadAnnotations();
+                    };
+                    imageObj.src = newImgUrl;
                 }
-                this._loadAnnotations();
-//                setTimeout(function () {
-//                    dojoLang.hitch(thisObj, thisObj._loadAnnotations());
-//                }, 100);
                 
 
             } else {
