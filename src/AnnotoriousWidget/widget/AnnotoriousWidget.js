@@ -57,6 +57,8 @@ define([
 
         // dojo.declare.constructor is called to construct the widget instance. Implement to initialize non-primitive properties.
         constructor: function () {
+            // Uncomment the following line to enable debug messages
+            //logger.level(logger.DEBUG);
             logger.debug(this.id + ".constructor");
             this._handles = [];
         },
@@ -72,11 +74,15 @@ define([
                 dojoClass.add(this.imgNode, this.imgClass);
             }
             this.domNode.appendChild(this.imgNode);
-            require([document.location.origin + "/widgets/AnnotoriousWidget/lib/annotorious.min.js"], function () {
+            if (typeof anno !== "undefined") {
+                logger.debug(this.id + ".postCreate, anno object exists");
                 thisObj._setupEvents();
-                thisObj._updateRendering();
-            });
-
+            } else {
+                require([document.location.origin + "/widgets/AnnotoriousWidget/lib/annotorious.min.js"], function () {
+                    logger.debug(thisObj.id + ".postCreate, anno object loaded");
+                    thisObj._setupEvents();
+                });
+            }
         },
 
         // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
@@ -136,7 +142,9 @@ define([
                 
                 newImgUrl = document.location.origin + "/file?target=internal&guid=" + this._contextObj.getGuid();
                 if (newImgUrl !== this.imgUrl) {
+                    logger.debug(this.id + "._updateRendering: different URL");
                     if (this.imgUrl) {
+                        logger.debug(this.id + "._updateRendering: anno.destroy");
                         anno.destroy(this.imgUrl);
                     }
                     this.imgUrl = newImgUrl;
@@ -153,6 +161,7 @@ define([
                 dojoStyle.set(this.domNode, "display", "none");
                 if (typeof anno !== "undefined") {
                     if (this.imgUrl) {
+                        logger.debug(this.id + "._updateRendering: anno.destroy; no context object");
                         anno.destroy(this.imgUrl);
                     }
                 }
@@ -161,6 +170,7 @@ define([
         },
         
         _loadAnnotations: function () {
+            logger.debug(this.id + "._loadAnnotations");
             var annotationArray,
                 annotationJson,
                 newAnnotation,
@@ -195,6 +205,7 @@ define([
         },
         
         _handleChange: function () {
+            logger.debug(this.id + "._handleChange");
             var annotationArray,
                 annotationJson,
                 thisObj = this;
